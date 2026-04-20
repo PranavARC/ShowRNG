@@ -6,14 +6,19 @@ import argparse
 import sys
 from pathlib import Path
 
+from replay_parser import extract_player_names, extract_turns
+
 def main():
     """Executes the main logic of the ShowRNG application."""
     replay_html = read_replay_html()
 
+    player_names = extract_player_names(replay_html)
+    turns = extract_turns(replay_html)
+
     # TODO:
-    # 1. Parse the replay html and get a list of turns
-    # 2. Find the RNG-based events in each turn and their results
-    # 3. Factor in all the events to calculate each player's luck percentile
+    # [X] 1. Parse the replay html and get a list of turns.
+    # [ ] 2. Find the RNG-based events in each turn and their results.
+    # [ ] 3. Factor in all the events to calculate each player's luck percentile.
 
     print(f"Player 1 aka {player_names[1]}'s luck percentile: 50.0")
     print(f"Player 2 aka {player_names[2]}'s luck percentile: 50.0")
