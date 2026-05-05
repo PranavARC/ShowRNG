@@ -8,6 +8,7 @@ from pathlib import Path
 
 from replay_parser import extract_player_names, extract_turns
 from event_finder import find_events
+from rng_calculator import calculate_luck_percentiles
 
 def main():
     """Executes the main logic of the ShowRNG application."""
@@ -17,14 +18,15 @@ def main():
     turns = extract_turns(replay_html)
 
     events = find_events(turns)
+    percentiles = calculate_luck_percentiles(events)
 
     # TODO:
     # [X] 1. Parse the replay html and get a list of turns.
     # [~] 2. Find the RNG-based events in each turn and their results.
-    # [ ] 3. Factor in all the events to calculate each player's luck percentile.
+    # [X] 3. Factor in all the events to calculate each player's luck percentile.
 
-    print(f"Player 1 aka {player_names[1]}'s luck percentile: 50.0")
-    print(f"Player 2 aka {player_names[2]}'s luck percentile: 50.0")
+    print(f"Player 1 aka {player_names[1]}'s luck percentile: {percentiles[1]}")
+    print(f"Player 2 aka {player_names[2]}'s luck percentile: {percentiles[2]}")
 
 def read_replay_html() -> str:
     """Parses the CLI arguments for the file path of the Showdown HTML replay file and reads it into a string."""
