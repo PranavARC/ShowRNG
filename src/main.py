@@ -20,13 +20,9 @@ def main():
     events = find_events(turns)
     percentiles = calculate_luck_percentiles(events)
 
-    # TODO:
-    # [X] 1. Parse the replay html and get a list of turns.
-    # [~] 2. Find the RNG-based events in each turn and their results.
-    # [X] 3. Factor in all the events to calculate each player's luck percentile.
-
     print(f"Player 1 aka {player_names[1]}'s luck percentile: {percentiles[1]}")
     print(f"Player 2 aka {player_names[2]}'s luck percentile: {percentiles[2]}")
+
 
 def read_replay_html() -> str:
     """Parses the CLI arguments for the file path of the Showdown HTML replay file and reads it into a string."""
