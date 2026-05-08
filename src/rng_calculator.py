@@ -17,7 +17,7 @@ def calculate_luck_percentiles(events: tuple[Event], relative=False) -> dict[int
     if not events:
         return DEFAULT_PERCENTILES.copy()
 
-    stats = pd.DataFrame(events).groupby('player').apply(lambda g: pd.Series({
+    player_stats = pd.DataFrame(events).groupby('player').apply(lambda g: pd.Series({
         'luck_delta': (g['success'] - g['chance']).sum(),   # luck_delta = the difference between actual and expected luck
         'variance': (g['chance'] * (1 - g['chance'])).sum()
     }))
@@ -25,15 +25,15 @@ def calculate_luck_percentiles(events: tuple[Event], relative=False) -> dict[int
     results = {}
     for p_id in (1, 2):
         # Since we default to considering individual luck, take the player's total variance and luck_delta
-        variance = stats.loc[p_id, 'variance']
-        luck_delta = stats.loc[p_id, 'luck_delta']
+        variance = player_stats.loc[p_id, 'variance']
+        luck_delta = player_stats.loc[p_id, 'luck_delta']
 
-        # If we consider relative luck, aka bad events to opponent count as good events to the player
-        # The new variance would sum up that of every event that occurred
-        # The new luck delta would be the player's minus everyone else's since opponent's luck = player's negative luck
+        # If we consider relative luck, aka that bad events to the opponent count as good events to the player:
+        # - The new variance would sum up that of every event that occurred
+        # - The new luck delta would be the player's minus everyone else's since opponent's luck = player's negative luck
         if relative:
-            variance = stats['variance'].sum()
-            luck_delta = net_value = 2 * stats.loc[p_id, 'luck_delta'] - stats['luck_delta'].sum()
+            variance = player_stats['variance'].sum()
+            luck_delta = net_value = 2 * player_stats.loc[p_id, 'luck_delta'] - player_stats['luck_delta'].sum()
 
         # Handle players with zero variance
         if variance <= 0:
